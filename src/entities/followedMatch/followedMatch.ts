@@ -6,7 +6,7 @@ export class FollowedMatch {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column()
+    @Column({unique: true})
     api_game_id!: number;
 
     @Column()
