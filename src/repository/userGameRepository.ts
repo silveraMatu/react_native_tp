@@ -3,7 +3,7 @@ import { FollowedMatch } from "../entities/followedMatch/followedMatch.js";
 import type { iUserGameRepository } from "../types/interfaces/iUserGameRepository.js";
 import type { DeleteResult } from "typeorm/browser";
 
-class UserGameRepository implements iUserGameRepository{
+export class UserGameRepository implements iUserGameRepository{
   constructor(private readonly repository: Repository<FollowedMatch>){}
 
   FollowGame(idUser: number, idGame: number, localTeam: string, visitorTeam: string, matchDate: string): Promise<FollowedMatch> {
