@@ -11,6 +11,8 @@ export class NbaService {
       idGame: game.id,
       home_team: game.home_team.full_name,
       visitor_team: game.visitor_team.full_name,
+      homeAcronym: game.home_team.abbreviation, 
+      visitorAcronym: game.visitor_team.abbreviation, 
       date: game.date
     }));
   }
