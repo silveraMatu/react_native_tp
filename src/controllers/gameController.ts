@@ -1,38 +1,44 @@
 import type { Request, Response } from "express";
-import type { GameService } from "../services/gameService.js";
+import { GameService } from "../services/gameService.js";
 
 export class GameController {
-  constructor(private readonly gameService: GameService) {}
+    constructor(private readonly gameService: GameService) {}
 
-  getFollowed = async (req: Request, res:Response) => {
-    try {
-      const {userId} = req.body;
-      const games = await this.gameService.getFollowedGames(userId)
-      if(!games.length) throw new Error("No has seguido ningún juego.")
-      res.status(201).json(games)
-    } catch (error: any) {
-      res.status(404).json({error: error.message})
-    }
-  }
+    followGame = async (req: Request, res: Response) => {
+        try {
+            const { userId, gameData } = req.body;
+            console.log(userId)
+            const newGame = await this.gameService.followNewGame(
+                Number(userId),
+                Number(gameData.id),
+                gameData.home_team.full_name,
+                gameData.visitor_team.full_name,
+                gameData.date
+            );
+            res.status(201).json(newGame);
+        } catch (error) {
+          console.log(error)
+            res.status(400).json({ error: "Error al seguir el partido" });
+        }
+    };
 
-  follow = async (req: Request, res: Response) => {
-    try {
-      const { userId, gameData } = req.body;
-      const result = await this.gameService.followNewGame(userId, gameData);
-      res.status(201).json(result);
-    } catch (error: any) {
-      console.log(error)
-      res.status(400).json({ error: error });
-    }
-  };
+    unfollowGame = async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params;
+            await this.gameService.removeGameFromWatchlist(Number(id));
+            res.status(200).json({ message: "Partido eliminado" });
+        } catch (error) {
+            res.status(400).json({ error: "Error al eliminar el partido" });
+        }
+    };
 
-  unfollow = async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-      await this.gameService.removeGameFromWatchlist(Number(id));
-      res.status(200).json({ message: "Juego eliminado" });
-    } catch (error) {
-      res.status(400).json({ error: "Error al dejar de seguir" });
-    }
-  };
+    getFollowed = async (req: Request, res: Response) => {
+        try {
+            const { userId } = req.params;
+            const games = await this.gameService.getFollowedGames(Number(userId));
+            res.status(200).json(games);
+        } catch (error) {
+            res.status(400).json({ error: "Error al obtener la cartelera" });
+        }
+    };
 }

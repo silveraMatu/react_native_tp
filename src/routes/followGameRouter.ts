@@ -1,20 +1,18 @@
 import { Router } from "express";
-import { dataSource } from "../conf/db_conf.js";
-import { FollowedMatch } from "../entities/followedMatch/followedMatch.js";
-import { UserGameRepository } from "../repository/userGameRepository.js";
-import { GameService } from "../services/gameService.js";
 import { GameController } from "../controllers/gameController.js";
+import { GameService } from "../services/gameService.js";
+import { UserGameRepository } from "../repository/userGameRepository.js";
+import { FollowedMatch } from "../entities/followedMatch/followedMatch.js";
+import { dataSource } from "../conf/db_conf.js";
 
 const router = Router();
 
-const typeormRepo = dataSource.getRepository(FollowedMatch);
-
-const gameRepo = new UserGameRepository(typeormRepo);
-const gameService = new GameService(gameRepo);
+const gameRepository = new UserGameRepository(dataSource.getRepository(FollowedMatch));
+const gameService = new GameService(gameRepository);
 const gameController = new GameController(gameService);
 
+router.post("/follow", gameController.followGame);
+router.delete("/unfollow/:id", gameController.unfollowGame);
 router.get("/followed/:userId", gameController.getFollowed);
-router.post("/follow", gameController.follow);
-router.delete("/unfollow/:id", gameController.unfollow);
 
 export default router;

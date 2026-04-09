@@ -1,19 +1,17 @@
 import { Router } from "express";
-import { dataSource } from "../conf/db_conf.js";
-import { User } from "../entities/user/user.entitie.js";
-import { UserReposiory } from "../repository/userRepository.js";
-import { UserService } from "../services/userService.js";
 import { UserController } from "../controllers/userController.js";
+import { UserService } from "../services/userService.js";
+import { UserRepository } from "../repository/userRepository.js";
+import { User } from "../entities/user/user.entitie.js"; // Asegurate de importar la entidad
+import { dataSource } from "../conf/db_conf.js";
 
 const router = Router();
 
-const typeormRepo = dataSource.getRepository(User);
-
-const userRepo = new UserReposiory(typeormRepo);
-const userService = new UserService(userRepo);
+const userRepository = new UserRepository(dataSource.getRepository(User));
+const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
 router.post("/register", userController.register);
-router.delete("/login", userController.login);
+router.post("/login", userController.login);
 
 export default router;

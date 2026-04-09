@@ -1,22 +1,15 @@
 import { useDailyGames } from "../hooks/useDailyGames";
-import { useFollowedGames } from "../../followedGames/hooks/useFollowedGames"; // Nuevo import
+import { useFollowedGames } from "../../followedGames/hooks/useFollowedGames";
 import { GameCard } from "./GameCard";
 import { useAuth } from "../../auth/context/AuthContext";
 
 export const DailyGamesList = () => {
   const { user } = useAuth();
-  
   const { games, isLoading: loadingDaily, error: errorDaily, followGame } = useDailyGames();
-  
-  const { 
-    followedGames, 
-    isLoading: loadingFollowed, 
-    unfollowGame, 
-    fetchFollowed 
-  } = useFollowedGames(user?.id);
+  const { followedGames, isLoading: loadingFollowed, unfollowGame, fetchFollowed } = useFollowedGames(user?.id);
 
-  // Manejadores de los botones
   const handleFollow = async (game) => {
+    console.log(user.id)
     const success = await followGame(user.id, {
       id: game.idGame,
       home_team: { full_name: game.home_team },
@@ -72,13 +65,13 @@ export const DailyGamesList = () => {
               date={game.date.split('T')[0]} 
               homeTeam={game.home_team}
               visitorTeam={game.visitor_team}
-              homeAcronym={game.home_team.substring(0, 3)} 
-              visitorAcronym={game.visitor_team.substring(0, 3)}
+              homeAcronym={game.homeAcronym} 
+              visitorAcronym={game.visitorAcronym}
               
               actionText={isFollowed ? "Siguiendo" : "Seguir Partido"}
               actionColor={
                 isFollowed 
-                  ? "bg-gray-800 hover:bg-black text-white"
+                  ? "bg-gray-800 hover:bg-black text-white" 
                   : "bg-orange-500 hover:bg-orange-600 text-white"
               }
               

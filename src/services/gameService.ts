@@ -7,13 +7,14 @@ export class GameService {
     return await this.gameRepository.getFollowedGames(userId)
   }
 
-  async followNewGame(userId: number, gameData: any) {
+  async followNewGame(userId: number, gameId: number, homeTeam: string, visitorTeam: string, matchDate: string) {
+    console.log(`${homeTeam} vs ${visitorTeam}`)
     return await this.gameRepository.followGame(
       userId,
-      gameData.id,
-      gameData.home_team.full_name,
-      gameData.visitor_team.full_name,
-      gameData.date
+      gameId,
+      homeTeam,
+      visitorTeam,
+      matchDate
     );
   }
 

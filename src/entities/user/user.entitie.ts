@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { FollowedMatch } from "../followedMatch/followedMatch.js"; 
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { FollowedMatch } from "../followedMatch/followedMatch.js";
 
 @Entity("users")
 export class User {
@@ -9,12 +9,12 @@ export class User {
     @Column({ unique: true })
     email!: string;
 
-    @Column({ select: false })
-    password!: string;
-
-    @Column()
+    @Column({ unique: true })
     nickname!: string;
 
-    @OneToMany(() => FollowedMatch, (match) => match.user)
-    followedMatches!: any;
+    @Column()
+    password!: string;
+
+    @OneToMany(() => FollowedMatch, (followedMatch) => followedMatch.user)
+    followedMatches!: FollowedMatch[];
 }

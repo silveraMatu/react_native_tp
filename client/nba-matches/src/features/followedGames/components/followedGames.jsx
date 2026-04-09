@@ -1,10 +1,9 @@
 import { useFollowedGames } from "../hooks/useFollowedGames";
 import { GameCard } from "../../dailyGames/components/GameCard";
-import { useAuth } from "../../auth/context/AuthContext"; // Importamos el contexto
+import { useAuth } from "../../auth/context/AuthContext";
 
 export const FollowedList = () => {
   const { user } = useAuth();
-  
   const { followedGames, isLoading, error, unfollowGame } = useFollowedGames(user?.id);
 
   if (isLoading) {
