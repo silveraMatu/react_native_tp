@@ -5,6 +5,7 @@ export class NbaService {
 
   async fetchDailySchedule() {
     const games = await this.nbaRepository.getTodayGames();
+    console.log(games.slice(-1))
 
     return games.map((game: any) => ({
       idGame: game.id,

@@ -16,5 +16,5 @@ export class User {
     nickname!: string;
 
     @OneToMany(() => FollowedMatch, (match) => match.user)
-    followedMatches!: FollowedMatch[];
+    followedMatches!: any;
 }

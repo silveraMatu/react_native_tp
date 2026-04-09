@@ -19,5 +19,5 @@ export class FollowedMatch {
     match_date!: string;
 
     @ManyToOne(() => User, (user) => user.followedMatches, { onDelete: "CASCADE" })
-    user!: User;
+    user!: any;
 }
