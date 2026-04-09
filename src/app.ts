@@ -6,12 +6,12 @@ import cors from "cors"
 
 export const app = e()
 
-cors({
-  origin: "",
-  
-})
+app.use(cors({
+  origin: "*"
+}));
 
 app.use(e.json())
+
 app.use(userRouter)
 app.use(nbaRouter)
 app.use(followGamesRouter)

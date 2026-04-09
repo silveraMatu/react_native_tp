@@ -13,6 +13,7 @@ const gameRepo = new UserGameRepository(typeormRepo);
 const gameService = new GameService(gameRepo);
 const gameController = new GameController(gameService);
 
+router.get("/followed/:userId", gameController.getFollowed);
 router.post("/follow", gameController.follow);
 router.delete("/unfollow/:id", gameController.unfollow);
 

@@ -9,6 +9,9 @@ export class UserService {
   }
 
   async login(nickname: string, pass: string): Promise<User | null> {
-    return await this.userRepository.Login(nickname, pass);
+    const user = await this.userRepository.Login(nickname);
+
+    if (user?.password == pass) return user
+    return null
   }
 }

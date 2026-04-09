@@ -9,7 +9,7 @@ export class UserReposiory implements iUserRepository{
     return this.repository.save({nickname, email, password})
   }
 
-  Login(nickname: string, password: string): Promise<User | null>{
-    return this.repository.findOneBy({nickname, password})
+  Login(nickname: string): Promise<User | null>{
+    return this.repository.findOneBy({nickname})
   }
 }

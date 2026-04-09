@@ -6,7 +6,13 @@ import type { DeleteResult } from "typeorm/browser";
 export class UserGameRepository implements iUserGameRepository{
   constructor(private readonly repository: Repository<FollowedMatch>){}
 
-  FollowGame(idUser: number, idGame: number, localTeam: string, visitorTeam: string, matchDate: string): Promise<FollowedMatch> {
+  getFollowedGames(idUser: number): Promise<FollowedMatch[]> {
+    return this.repository.find({ 
+      where: { user: { id: idUser } } 
+    });
+  }
+
+  followGame(idUser: number, idGame: number, localTeam: string, visitorTeam: string, matchDate: string): Promise<FollowedMatch> {
     return this.repository.save({
       api_game_id: idGame,
       home_team_name: localTeam,

@@ -6,6 +6,7 @@ export class NbaController {
 
   getSchedule = async (_req: Request, res: Response) => {
     try {
+      console.log("llego un cosito")
       const schedule = await this.nbaService.fetchDailySchedule();
       res.status(200).json(schedule);
     } catch (error) {

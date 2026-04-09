@@ -3,13 +3,17 @@ import type { iUserGameRepository } from "../types/interfaces/iUserGameRepositor
 export class GameService {
   constructor(private readonly gameRepository: iUserGameRepository) {}
 
+  async getFollowedGames(userId: number){
+    return await this.gameRepository.getFollowedGames(userId)
+  }
+
   async followNewGame(userId: number, gameData: any) {
-    return await this.gameRepository.FollowGame(
+    return await this.gameRepository.followGame(
       userId,
       gameData.id,
       gameData.home_team.full_name,
       gameData.visitor_team.full_name,
-      gameData.date.split('T')[0]
+      gameData.date
     );
   }
 
