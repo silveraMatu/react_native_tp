@@ -1,10 +1,12 @@
 import { useFollowedGames } from "../hooks/useFollowedGames";
 import { GameCard } from "../../dailyGames/components/GameCard";
 import { useAuth } from "../../auth/context/AuthContext";
+import { useTeamStats } from "../../../core/hooks/useTeamStats";
 
 export const FollowedList = () => {
   const { user } = useAuth();
   const { followedGames, isLoading, error, unfollowGame } = useFollowedGames(user?.id);
+  const stats = useTeamStats();
 
   if (isLoading) {
     return (
@@ -22,7 +24,7 @@ export const FollowedList = () => {
     );
   }
 
-  if (followedGames.length === 0) {
+  if (!followedGames || followedGames.length === 0) {
     return (
       <div className="text-center text-gray-500 mt-10">
         No estás siguiendo ningún partido todavía.
@@ -35,14 +37,19 @@ export const FollowedList = () => {
       <h1 className="text-2xl font-black mb-6 text-gray-800">Mis Seguidos</h1>
       
       <div className="flex flex-col gap-2">
-        {followedGames.map((game) => (
+
+        {followedGames?.map((game) => (
           <GameCard 
             key={game.id}
             date={game.match_date} 
             homeTeam={game.home_team_name}
             visitorTeam={game.visitor_team_name}
-            homeAcronym={game.homeAcronym} 
-            visitorAcronym={game.visitorAcronym}
+            homeAcronym={game.home_team_name.substring(0, 3)} 
+            visitorAcronym={game.visitor_team_name.substring(0, 3)}
+            
+            homeForm={stats?.[game.home_team_name] || []} 
+            visitorForm={stats?.[game.visitor_team_name] || []}
+
             actionText="Dejar de seguir"
             actionColor="bg-gray-200 hover:bg-gray-300 text-gray-700"
             onAction={() => unfollowGame(game.id)}

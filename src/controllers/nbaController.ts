@@ -13,4 +13,13 @@ export class NbaController {
       res.status(500).json({ error: "Error al obtener la cartelera de la NBA" });
     }
   };
+
+  getStats = async (req: Request, res: Response) => {
+    try {
+      const stats = await this.nbaService.fetchTeamGlobalsStats();
+      res.status(200).json(stats);
+    } catch (error) {
+      res.status(400).json({ error: "Error al obtener estadísticas" });
+    }
+  };
 }

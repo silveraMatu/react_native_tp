@@ -2,11 +2,13 @@ import { useDailyGames } from "../hooks/useDailyGames";
 import { useFollowedGames } from "../../followedGames/hooks/useFollowedGames";
 import { GameCard } from "./GameCard";
 import { useAuth } from "../../auth/context/AuthContext";
+import { useTeamStats } from "../../../core/hooks/useTeamStats";
 
 export const DailyGamesList = () => {
   const { user } = useAuth();
   const { games, isLoading: loadingDaily, error: errorDaily, followGame } = useDailyGames();
   const { followedGames, isLoading: loadingFollowed, unfollowGame, fetchFollowed } = useFollowedGames(user?.id);
+  const stats = useTeamStats()
 
   const handleFollow = async (game) => {
     console.log(user.id)
@@ -67,6 +69,8 @@ export const DailyGamesList = () => {
               visitorTeam={game.visitor_team}
               homeAcronym={game.homeAcronym} 
               visitorAcronym={game.visitorAcronym}
+              homeForm={stats[game.home_team]} 
+              visitorForm={stats[game.visitor_team]}
               
               actionText={isFollowed ? "Siguiendo" : "Seguir Partido"}
               actionColor={

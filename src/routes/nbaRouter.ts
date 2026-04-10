@@ -10,5 +10,6 @@ const nbaService = new NbaService(nbaRepo);
 const nbaController = new NbaController(nbaService);
 
 router.get("/today", nbaController.getSchedule);
+router.get("/stats", nbaController.getStats);
 
 export default router;
