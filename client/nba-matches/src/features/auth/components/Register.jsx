@@ -1,32 +1,61 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export const Register = () => {
-  const { register } = useAuth();
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
+
+const initialState = {
+  formData: {
     email: "",
     nickname: "",
     password: "",
-  });
+  },
+  error: null,
+  isLoading: false,
+};
+
+function registerReducer(state, action) {
+  switch (action.type) {
+    case 'FIELD_CHANGE':
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          [action.field]: action.value
+        }
+      };
+    case 'REGISTER_START':
+      return { ...state, isLoading: true, error: null };
+    case 'REGISTER_SUCCESS':
+      return { ...state, isLoading: false };
+    case 'REGISTER_ERROR':
+      return { ...state, isLoading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
+
+export const Register = () => {
+  const { register } = useAuth();
+  const [state, dispatch] = useReducer(registerReducer, initialState);
+  const { formData, error, isLoading } = state;
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    dispatch({ 
+      type: 'FIELD_CHANGE', 
+      field: e.target.name, 
+      value: e.target.value 
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+    dispatch({ type: 'REGISTER_START' });
     
     try {
       await register(formData.email, formData.nickname, formData.password);
+      dispatch({ type: 'REGISTER_SUCCESS' });
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: 'REGISTER_ERROR', payload: err.message });
     }
   };
 
